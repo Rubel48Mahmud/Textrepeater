@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Text Repeater</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: linear-gradient(135deg, #74ebd5, #9face6);
+      margin: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 10px;
+    }
+    .container {
+      background: rgba(255, 255, 255, 0.95);
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+      max-width: 400px;
+      width: 100%;
+      text-align: center;
+    }
+    h2 {
+      margin-bottom: 15px;
+      color: #333;
+    }
+    .input-group {
+      display: flex;
+      margin-bottom: 12px;
+    }
+    .input-group input[type="text"] {
+      flex: 1;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 6px 0 0 6px;
+      outline: none;
+    }
+    .input-group button {
+      padding: 10px 12px;
+      border: none;
+      background: #ff4d4d;
+      color: white;
+      border-radius: 0 6px 6px 0;
+      cursor: pointer;
+    }
+    input[type="number"] {
+      width: 90%;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      outline: none;
+      margin-bottom: 10px;
+    }
+    .btn {
+      margin-top: 12px;
+      padding: 12px;
+      width: 100%;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      background: #4CAF50;
+      color: white;
+      font-size: 16px;
+    }
+    .btn:hover {
+      background: #45a049;
+    }
+    .output-box {
+      margin-top: 15px;
+      background: #f1f1f1;
+      padding: 12px;
+      border-radius: 6px;
+      min-height: 60px;
+      text-align: left;
+      white-space: pre-wrap;
+      word-break: break-word;
+      font-size: 14px;
+      color: #333;
+    }
+    #copyBtn {
+      margin-top: 10px;
+      background: #007BFF;
+      display: none;
+    }
+    #copyBtn:hover {
+      background: #0069d9;
+    }
+    #errorMsg {
+      color: red;
+      font-size: 14px;
+      margin-top: 8px;
+    }
+    #copiedMsg {
+      display: none;
+      color: green;
+      font-size: 14px;
+      margin-top: 8px;
+    }
+    footer {
+      margin-top: 15px;
+      font-size: 14px;
+    }
+    footer a {
+      text-decoration: none;
+      color: #007BFF;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Text Repeater</h2>
+    
+    <div class="input-group">
+      <input type="text" id="textInput" placeholder="Enter text here...">
+      <button onclick="clearInput()">Clear</button>
+    </div>
+    
+    <input type="number" id="repeatCount" placeholder="Repetitions" min="1">
+    
+    <div>
+      <label><input type="checkbox" id="addNewline"> Add newline</label>
+    </div>
+    
+    <button class="btn" onclick="repeatText()">Repeat Text</button>
+    
+    <div id="errorMsg"></div>
+    <div id="copiedMsg">✅ Copied..!</div>
+    
+    <div id="output" class="output-box"></div>
+    <button class="btn" id="copyBtn" onclick="copyOutput()">Copy Output</button>
+    
+    <footer>
+      Developed by <a href="https://www.facebook.com/share/177zDNZnGC/" target="_blank">Rubel Mahmud</a>
+    </footer>
+  </div>
+  
+  <script>
+    function clearInput() {
+      document.getElementById("textInput").value = "";
+    }
+    
+    function repeatText() {
+      const text = document.getElementById("textInput").value.trim();
+      const count = parseInt(document.getElementById("repeatCount").value);
+      const addNewline = document.getElementById("addNewline").checked;
+      let output = "";
+      
+      document.getElementById("errorMsg").innerText = "";
+      document.getElementById("copiedMsg").style.display = "none";
+      
+      if (!text || !count || count < 1) {
+        document.getElementById("errorMsg").innerText = "⚠ Please enter text and valid repetitions!";
+        document.getElementById("output").innerText = "";
+        document.getElementById("copyBtn").style.display = "none";
+        return;
+      }
+      
+      for (let i = 0; i < count; i++) {
+        output += text;
+        output += (addNewline) ? "\n" : " ";
+      }
+      
+      document.getElementById("output").textContent = output.trim();
+      document.getElementById("copyBtn").style.display = "block";
+    }
+    
+    function copyOutput() {
+      const outputText = document.getElementById("output").textContent;
+      if (!outputText) return;
+
+      // fallback দিয়ে কপি
+      const tempArea = document.createElement("textarea");
+      tempArea.value = outputText;
+      document.body.appendChild(tempArea);
+      tempArea.select();
+      document.execCommand("copy");
+      document.body.removeChild(tempArea);
+
+      // ✅ copied message show
+      const msg = document.getElementById("copiedMsg");
+      msg.style.display = "block";
+      setTimeout(() => {
+        msg.style.display = "none";
+      }, 1500);
+    }
+  </script>
+</body>
+</html>
