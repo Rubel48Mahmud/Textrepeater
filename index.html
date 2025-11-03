@@ -11,9 +11,9 @@
       margin: 0;
       display: flex;
       justify-content: center;
-      align-items: center;
+      align-items: flex-start; /* উপরে তোলার জন্য */
       min-height: 100vh;
-      padding: 10px;
+      padding: 20px 10px;
     }
     .container {
       background: rgba(255, 255, 255, 0.95);
@@ -23,6 +23,7 @@
       max-width: 400px;
       width: 100%;
       text-align: center;
+      margin-top: 20px; /* মোবাইল স্কিনে উপরে দেখানোর জন্য */
     }
     h2 {
       margin-bottom: 15px;
@@ -48,7 +49,7 @@
       cursor: pointer;
     }
     input[type="number"] {
-      width: 90%;
+      width: 50%;
       padding: 10px;
       border: 1px solid #ccc;
       border-radius: 6px;
@@ -56,18 +57,30 @@
       margin-bottom: 10px;
     }
     .btn {
-      margin-top: 12px;
-      padding: 12px;
-      width: 100%;
+      padding: 10px;
       border: none;
       border-radius: 6px;
       cursor: pointer;
-      background: #4CAF50;
+      font-size: 14px;
       color: white;
-      font-size: 16px;
     }
     .btn:hover {
-      background: #45a049;
+      opacity: 0.9;
+    }
+    .btn-group {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      margin-top: 10px;
+    }
+    #repeatBtn {
+      background: #4CAF50;
+      flex: 1;
+    }
+    #copyBtn {
+      background: #007BFF;
+      flex: 1;
+      display: none;
     }
     .output-box {
       margin-top: 15px;
@@ -80,14 +93,6 @@
       word-break: break-word;
       font-size: 14px;
       color: #333;
-    }
-    #copyBtn {
-      margin-top: 10px;
-      background: #007BFF;
-      display: none;
-    }
-    #copyBtn:hover {
-      background: #0069d9;
     }
     #errorMsg {
       color: red;
@@ -126,13 +131,15 @@
       <label><input type="checkbox" id="addNewline"> Add newline</label>
     </div>
     
-    <button class="btn" onclick="repeatText()">Repeat Text</button>
+    <div class="btn-group">
+      <button id="repeatBtn" class="btn" onclick="repeatText()">Repeat</button>
+      <button id="copyBtn" class="btn" onclick="copyOutput()">Copy</button>
+    </div>
     
     <div id="errorMsg"></div>
     <div id="copiedMsg">✅ Copied..!</div>
     
     <div id="output" class="output-box"></div>
-    <button class="btn" id="copyBtn" onclick="copyOutput()">Copy Output</button>
     
     <footer>
       Developed by <a href="https://www.facebook.com/share/177zDNZnGC/" target="_blank">Rubel Mahmud</a>
@@ -161,8 +168,7 @@
       }
       
       for (let i = 0; i < count; i++) {
-        output += text;
-        output += (addNewline) ? "\n" : " ";
+        output += text + (addNewline ? "\n" : " ");
       }
       
       document.getElementById("output").textContent = output.trim();
@@ -173,7 +179,6 @@
       const outputText = document.getElementById("output").textContent;
       if (!outputText) return;
 
-      // fallback দিয়ে কপি
       const tempArea = document.createElement("textarea");
       tempArea.value = outputText;
       document.body.appendChild(tempArea);
@@ -181,7 +186,6 @@
       document.execCommand("copy");
       document.body.removeChild(tempArea);
 
-      // ✅ copied message show
       const msg = document.getElementById("copiedMsg");
       msg.style.display = "block";
       setTimeout(() => {
